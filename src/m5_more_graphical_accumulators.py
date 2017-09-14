@@ -28,8 +28,8 @@ import rosegraphics as rg
 def main():
     """ Calls the   TEST   functions in this module. """
     # test_draw_squares_from_circle()
-    test_draw_circles_from_rectangle()
-    # test_draw_lines_from_rectangles()
+    # test_draw_circles_from_rectangle()
+    test_draw_lines_from_rectangles()
 
 
 def test_draw_squares_from_circle():
@@ -132,7 +132,7 @@ def test_draw_circles_from_rectangle():
     print('--------------------------------------------------')
 
     # ------------------------------------------------------------------
-    # TODO: 3. Implement this TEST function.
+    # TODONE: 3. Implement this TEST function.
     #   It TESTS the  draw_circles_from_rectangle  function
     #   defined below.  Include at least **   3   ** tests, of which
     #      ***  at least TWO tests are on ONE window and
@@ -154,10 +154,10 @@ def test_draw_circles_from_rectangle():
     draw_circles_from_rectangle(4,5, rect, window1)
 
     # Test 2:
-    rect = rg.Rectangle(rg.Point(400, 250), rg.Point(440, 325))
+    rect = rg.Rectangle(rg.Point(600, 400), rg.Point(500,450))
     rect.fill_color = 'blue'
     rect.outline_color = 'red'
-    draw_circles_from_rectangle(4, 5, rect, window1)
+    draw_circles_from_rectangle(8, 3, rect, window1)
     window1.close_on_mouse_click()
 
     # ------------------------------------------------------------------
@@ -228,16 +228,30 @@ def draw_circles_from_rectangle(m, n, rectangle, window):
     #          ** FIRST DO A CONCRETE EXAMPLE BY HAND! **
     ####################################################################
     # ------------------------------------------------------------------
-    r = circle.radius
-    ulx = circle.center.x - r
-    uly = circle.center.y - r
-    lrx = circle.center.x + r
-    lry = circle.center.y + r
-
-    for k in range():
-        rect = rg.Rectangle(rg.Point(), rg.Point())
-        rect.attach_to(window)
+    rectangle.attach_to(window)
+    ulx = rectangle.get_upper_left_corner().x
+    uly = rectangle.get_upper_left_corner().y
+    lrx = rectangle.get_lower_right_corner().x
+    lry = rectangle.get_lower_right_corner().y
+    r1 = (lry-uly)/2
+    r2 = (lrx-ulx)/2
+    x1 = rectangle.get_center().x - (lrx-ulx)/2 - r1
+    y1 = rectangle.get_center().y
+    x2 = rectangle.get_center().x
+    y2 = rectangle.get_center().y - (lry-uly)/2 -r2
+    for k in range(m):
+        c1 = rg.Circle(rg.Point(x1,y1),r1)
+        c1.fill_color = rectangle.fill_color
+        c1.attach_to(window)
         window.render()
+        x1 -= 2*r1
+
+    for k in range(n):
+        c2 = rg.Circle(rg.Point(x2, y2), r2)
+        c2.outline_color = rectangle.outline_color
+        c2.attach_to(window)
+        window.render()
+        y2 -= 2*r2
 
 def test_draw_lines_from_rectangles():
     """ Tests the   draw_lines_from_rectangles  function. """
@@ -316,7 +330,7 @@ def draw_lines_from_rectangles(rectangle1, rectangle2, n, window):
       :type window: rg.RoseWindow
       """
     # ------------------------------------------------------------------
-    # TODO: 5. Implement and test this function.
+    # TODONE: 5. Implement and test this function.
     #          Tests have been written for you (above).
     #
     # CONSIDER using the ACCUMULATOR IN GRAPHICS pattern,
@@ -329,6 +343,33 @@ def draw_lines_from_rectangles(rectangle1, rectangle2, n, window):
     #          ** FIRST DO A CONCRETE EXAMPLE BY HAND! **
     ####################################################################
     # ------------------------------------------------------------------
+    rectangle1.attach_to(window)
+    rectangle2.attach_to(window)
+
+    x1 = rectangle1.get_center().x
+    y1 = rectangle1.get_center().y
+    x2 = rectangle2.get_center().x
+    y2 = rectangle2.get_center().y
+
+    width1 = rectangle1.get_center().x - rectangle1.get_lower_left_corner().x
+    height1 = rectangle1.get_lower_left_corner().y - rectangle1.get_center().y
+    width2 = rectangle2.get_lower_left_corner().x - rectangle2.get_center().x
+    height2 = rectangle2.get_lower_left_corner().y - rectangle2.get_center().y
+
+    for k in range(n):
+        line = rg.Line(rg.Point(x1,y1), rg.Point(x2,y2))
+        line.thickness = 5
+        if k%2 == 0:
+            line.color = rectangle1.outline_color
+        elif k%2 == 1:
+            line.color = rectangle2.outline_color
+        line.attach_to(window)
+        window.render()
+        x1 = x1 - width1
+        y1 = y1 + height1
+        x2 -= width1
+        y2 += height1
+
 
 
 # ----------------------------------------------------------------------
